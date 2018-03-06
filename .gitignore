@@ -1,0 +1,36 @@
+# See reference at https://github.com/github/gitignore/ for more configurations
+
+# Maven
+target/
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+atlassian*.xml
+
+# Eclipse
+.project
+.metadata
+.classpath
+.settings/
+
+# OSX
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*               # Thumbnails
+.Spotlight-V100   # Files that might appear on external disk
+.Trashes          # Files that might appear on external disk
+/.checkstyle
+
+# NetBeans
+nbactions.xml

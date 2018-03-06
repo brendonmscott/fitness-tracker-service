@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<FindBugsFilter>
+   <!-- This is handled in logging configuration -->
+   <Match>
+      <Bug pattern="CRLF_INJECTION_LOGS" />
+   </Match>
+
+   <!--FIXME -->
+   <Match>
+      <Bug pattern="SPRING_CSRF_PROTECTION_DISABLED" />
+   </Match>
+   <Match>
+      <Bug pattern="UP_UNUSED_PARAMETER" />
+   </Match>
+</FindBugsFilter>

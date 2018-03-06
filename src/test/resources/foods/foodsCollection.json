@@ -1,0 +1,18 @@
+[
+  {
+    "id" : "59e2cff8e4b06b700839b5fa",
+    "name" : "Peanut Butter",
+    "calories" : 188,
+    "fatGrams" : "16",
+    "proteinGrams" : "8",
+    "carbGrams" : "6"
+  },
+  {
+    "id" : "59e2cff8e4b06b700839b5fb",
+    "name" : "Banana",
+    "calories" : 105,
+    "fatGrams" : "0",
+    "proteinGrams" : "0",
+    "carbGrams" : "0.4"
+  }
+]

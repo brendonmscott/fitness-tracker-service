@@ -1,0 +1,45 @@
+server:
+  port: ${PORT:8083}
+  context-path: /v1/api
+
+spring:
+  application:
+    name: fitness-tracker-service
+  data:
+    mongodb:
+      database: fitness_tracker
+
+logging:
+    pattern:
+      file: "%-5level - %replace(%msg){'[\r\n]', ''}%n"
+      console: "%-5level - %replace(%msg){'[\r\n]', ''}%n"
+    level:
+      org.springframework: WARN
+      org.hibernate: WARN
+
+security:
+  oauth2:
+    resource.filter-order: 3
+  signing-key: MaYzkSjmkzPC57L
+  encoding-strength: 256
+  security-realm: Spring Boot JWT Example Realm
+
+  jwt:
+    client-id: testjwtclientid
+    client-secret: XY7kmzoNzl100
+    grant-type: password
+    scope-read: read
+    scope-write: write
+    resource-ids: testjwtresourceid
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${DISCOVERY_URL:http://localhost:8761}/eureka/
+  instance:
+    leaseRenewalIntervalInSeconds: 1
+    leaseExpirationDurationInSeconds: 2
+
+ribbon:
+  eureka:
+    enabled: true

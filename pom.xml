@@ -1,0 +1,810 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.9.RELEASE</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.bscott.fitness.tracker</groupId>
+    <artifactId>fitness-tracker-parent</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>Fitness Service</name>
+
+    <description>The parent project for Fitness Tracker</description>
+
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>Temporary Staging Repository</name>
+            <url>file://${project.build.directory}/mvn-repo</url>
+        </repository>
+    </distributionManagement>
+
+    <properties>
+        <!-- For Using Github as Maven Repo -->
+        <!-- github server corresponds to entry in ~/.m2/settings.xml -->
+        <github.global.server>github</github.global.server>
+
+        <!-- Set default encoding to UTF-8 (most plugins) -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
+
+        <!-- Set compiler source and target versions -->
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>${maven.compiler.target}</maven.compiler.source>
+
+        <!-- Set compiler to be more verbose -->
+        <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
+        <maven.compiler.showWarnings>true</maven.compiler.showWarnings>
+
+        <!-- Set target JDK to analyze based on -->
+        <targetJdk>${maven.compiler.target}</targetJdk>
+
+        <!-- Version of maven -->
+        <config.maven.version>3.2.5</config.maven.version>
+
+        <!-- Dependency Versions-->
+        <checkstyleVersion>2.11</checkstyleVersion>
+        <commons-lang-version>3.1</commons-lang-version>
+        <gson-version>2.8.0</gson-version>
+        <guava-version>20.0</guava-version>
+        <io.springfox.version>2.7.0</io.springfox.version>
+        <jacocoVersion>0.7.8</jacocoVersion>
+        <javax-validation-version>1.1.0.Final</javax-validation-version>
+        <lombok-version>1.16.20</lombok-version>
+        <mockito-version>1.9.5</mockito-version>
+        <orika-version>1.4.6</orika-version>
+        <slf4j-version>1.7.22</slf4j-version>
+        <swagger-version>1.5.3</swagger-version>
+
+        <!-- Sonar Properties-->
+        <sonar.cpd.exclusions>**/*Dto.java</sonar.cpd.exclusions>
+        <!-- Need this exclusion until Jacoco 0.8.0, which will ignore private constructors-->
+        <sonar.exclusions>**/*Constants.java</sonar.exclusions>
+        <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
+        <sonar.language>java</sonar.language>
+        <sonar.jacoco.reportPaths>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPaths>
+        <config.findbugs.excludeFilterFile>findbugs-exclude.xml</config.findbugs.excludeFilterFile>
+
+        <!-- Plugin Versions -->
+        <plugin.version.enforcer-plugin>1.4.1</plugin.version.enforcer-plugin>
+        <plugin.version.maven-plugin>0.12</plugin.version.maven-plugin>
+        <plugin.version.checkstyle>2.16</plugin.version.checkstyle>
+        <plugin.version.dependency-plugin>3.0.2</plugin.version.dependency-plugin>
+        <plugin.version.dependency-check-plugin>3.0.1</plugin.version.dependency-check-plugin>
+        <plugin.version.findbugs-plugin>3.0.5</plugin.version.findbugs-plugin>
+        <plugin.version.surefire-plugin>2.20.1</plugin.version.surefire-plugin>
+        <plugin.version.exec-maven-plugin>1.2</plugin.version.exec-maven-plugin>
+
+        <plugin.dep.version.fb-contrib>7.0.3</plugin.dep.version.fb-contrib>
+        <plugin.dep.version.findsecbugs>1.7.0</plugin.dep.version.findsecbugs>
+        <plugin.dep.version.pedantic-pom-enforcers>1.2.0</plugin.dep.version.pedantic-pom-enforcers>
+
+        <!-- Pedantic POM Enforcers consist of several Maven enforcer rules that help you keep your -->
+        <!-- project setup consistent and organized (https://github.com/ferstl/pedantic-pom-enforcers) -->
+        <config.enforcer.enforcers>POM_SECTION_ORDER,MODULE_ORDER,DEPENDENCY_MANAGEMENT_ORDER,DEPENDENCY_MANAGEMENT_LOCATION,DEPENDENCY_ORDER,DEPENDENCY_CONFIGURATION,DEPENDENCY_SCOPE,PLUGIN_MANAGEMENT_ORDER,PLUGIN_CONFIGURATION,PLUGIN_MANAGEMENT_LOCATION</config.enforcer.enforcers>
+
+        <!-- PedanticDependencyConfigurationEnforcer -->
+        <config.enforcer.allowUnmanagedProjectVersions>true</config.enforcer.allowUnmanagedProjectVersions>
+        <config.enforcer.manageDependencyExclusions>true</config.enforcer.manageDependencyExclusions>
+        <config.enforcer.manageDependencyVersions>true</config.enforcer.manageDependencyVersions>
+
+        <!-- PedanticDependencyManagementLocationEnforcer -->
+        <config.enforcer.dependencyManagingPoms/>
+
+        <!-- PedanticDependencyManagementOrderEnforcer -->
+        <config.enforcer.dependencyManagementArtifactIdPriorities/>
+        <config.enforcer.dependencyManagementGroupIdPriorities/>
+        <config.enforcer.dependencyManagementOrderBy>scope,groupId,artifactId</config.enforcer.dependencyManagementOrderBy>
+        <config.enforcer.dependencyManagementScopePriorities>compile,runtime,provided</config.enforcer.dependencyManagementScopePriorities>
+
+        <!-- PedanticDependencyOrderEnforcer -->
+        <config.enforcer.dependenciesArtifactIdPriorities/>
+        <config.enforcer.dependenciesGroupIdPriorities/>
+        <config.enforcer.dependenciesOrderBy>scope,groupId,artifactId</config.enforcer.dependenciesOrderBy>
+        <config.enforcer.dependenciesScopePriorities>compile,runtime,provided</config.enforcer.dependenciesScopePriorities>
+
+        <!-- PedanticDependencyScopeEnforcer -->
+        <config.enforcer.compileDependencies/>
+        <config.enforcer.importDependencies/>
+        <config.enforcer.providedDependencies/>
+        <config.enforcer.runtimeDependencies/>
+        <config.enforcer.systemDependencies/>
+        <config.enforcer.testDependencies/>
+
+        <!-- PedanticModuleOrderEnforcer -->
+        <config.enforcer.moduleOrderIgnores/>
+
+        <!-- PedanticPluginConfigurationEnforcer -->
+        <config.enforcer.managePluginConfigurations>true</config.enforcer.managePluginConfigurations>
+        <config.enforcer.managePluginDependencies>true</config.enforcer.managePluginDependencies>
+        <config.enforcer.managePluginVersions>true</config.enforcer.managePluginVersions>
+
+        <!-- PedanticPluginManagementLocationEnforcer -->
+        <config.enforcer.pluginManagingPoms/>
+
+        <!-- PedanticPluginManagementOrderEnforcer -->
+        <config.enforcer.pluginManagementArtifactIdPriorities/>
+        <config.enforcer.pluginManagementGroupIdPriorities/>
+        <config.enforcer.pluginManagementOrderBy>groupId,artifactId</config.enforcer.pluginManagementOrderBy>
+
+        <!-- PedanticPomSectionOrderEnforcer -->
+        <config.enforcer.pomSectionPriorities>modelVersion,parent,groupId,artifactId,version,packaging,name,description,url,inceptionYear,organization,licenses,developers,contributors,mailingLists,prerequisites,modules,scm,issueManagement,ciManagement,distributionManagement,properties,dependencyManagement,dependencies,repositories,pluginRepositories,build,reports,reporting,profiles</config.enforcer.pomSectionPriorities>
+        <config.check.skipEnforcer>false</config.check.skipEnforcer>
+        <config.check.failEnforcer>true</config.check.failEnforcer>
+
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>annotations</artifactId>
+                <version>3.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-core</artifactId>
+                <version>${io.springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-spi</artifactId>
+                <version>${io.springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-spring-web</artifactId>
+                <version>${io.springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.springfox</groupId>
+                <artifactId>springfox-swagger2</artifactId>
+                <version>${io.springfox.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+                <version>${swagger-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.validation</groupId>
+                <artifactId>validation-api</artifactId>
+                <version>${javax-validation-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ma.glasnost.orika</groupId>
+                <artifactId>orika-core</artifactId>
+                <version>${orika-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mongodb</groupId>
+                <artifactId>bson</artifactId>
+                <version>3.4.3</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j-version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok-version}</version>
+                <scope>provided</scope>
+            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.springframework.cloud</groupId>-->
+                <!--<artifactId>spring-cloud-dependencies</artifactId>-->
+                <!--<version>Edgware.SR1</version>-->
+                <!--<type>pom</type>-->
+                <!--<scope>import</scope>-->
+            <!--</dependency>-->
+
+            <!-- Test Dependencies -->
+            <!--<dependency>-->
+                <!--<groupId>org.mockito</groupId>-->
+                <!--<artifactId>mockito-core</artifactId>-->
+                <!--<version>${mockito-version}</version>-->
+                <!--<scope>test</scope>-->
+                <!--<exclusions>-->
+                    <!--<exclusion>-->
+                        <!--<groupId>org.hamcrest</groupId>-->
+                        <!--<artifactId>hamcrest-core</artifactId>-->
+                    <!--</exclusion>-->
+                <!--</exclusions>-->
+            <!--</dependency>-->
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-spi</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-spring-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger</groupId>
+            <artifactId>swagger-annotations</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ma.glasnost.orika</groupId>
+            <artifactId>orika-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>bson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-jwt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security.oauth</groupId>
+            <artifactId>spring-security-oauth2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.cloud</groupId>-->
+            <!--<artifactId>spring-cloud-starter-eureka</artifactId>-->
+        <!--</dependency>-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>fitness-tracker-ws-mvn-repo</id>
+            <url>https://raw.github.com/brendonmscott/fitness-tracker-ws/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.github.github</groupId>
+                    <artifactId>site-maven-plugin</artifactId>
+                    <version>${plugin.version.maven-plugin}</version>
+                    <configuration>
+                        <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
+                        <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
+                        <outputDirectory>${project.build.directory}/mvn-repo</outputDirectory> <!-- matches distribution management repository url above -->
+                        <branch>refs/heads/mvn-repo</branch>                       <!-- remote branch name -->
+                        <includes><include>**/*</include></includes>
+                        <repositoryName>fitness-tracker-ws</repositoryName>      <!-- github repo name -->
+                        <repositoryOwner>brendonmscott</repositoryOwner>    <!-- github username  -->
+                    </configuration>
+                    <executions>
+                        <!-- run site-maven-plugin's 'site' target as part of the build's normal 'deploy' phase -->
+                        <execution>
+                            <goals>
+                                <goal>site</goal>
+                            </goals>
+                            <phase>deploy</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${plugin.version.checkstyle}</version>
+                    <executions>
+                        <execution>
+                            <id>check sources for code style violations</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                            <configuration>
+                                <logViolationsToConsole>true</logViolationsToConsole>
+                                <configLocation>checkstyle.xml</configLocation>
+                                <failOnViolation>true</failOnViolation>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <!-- Dependency manipulation (copy, unpack) and analysis -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>${plugin.version.dependency-plugin}</version>
+
+                    <configuration>
+                        <skip>false</skip>
+                        <failOnWarning>true</failOnWarning>
+                        <ignoreNonCompile>true</ignoreNonCompile>
+                        <ignoredDependencies>
+                            <ignoredDependency>org.springframework*</ignoredDependency>
+                        </ignoredDependencies>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>default</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>analyze-only</goal>
+                                <goal>analyze-duplicate</goal>
+                                <goal>analyze-dep-mgt</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <!-- Environmental constraint checking (Maven Version, JDK etc), User Custom Rule Execution -->
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${plugin.version.enforcer-plugin}</version>
+                    <executions>
+                        <execution>
+                            <id>default</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>enforce</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                    <configuration>
+                        <skip>${config.check.skipEnforcer}</skip>
+                        <fail>${config.check.failEnforcer}</fail>
+                        <failFast>false</failFast>
+                        <rules>
+                            <requireMavenVersion>
+                                <version>[${config.maven.version},)</version>
+                            </requireMavenVersion>
+
+                            <requireJavaVersion>
+                                <version>${maven.compiler.target}</version>
+                            </requireJavaVersion>
+
+                            <compound implementation="com.github.ferstl.maven.pomenforcers.CompoundPedanticEnforcer">
+                                <enforcers>${config.enforcer.enforcers}</enforcers>
+
+                                <!-- POM_SECTION_ORDER Configuration Options -->
+                                <!-- Comma separated list of section priorities -->
+                                <pomSectionPriorities>${config.enforcer.pomSectionPriorities}</pomSectionPriorities>
+
+                                <!-- MODULE_ORDER Configuration Options -->
+                                <!-- Comma-separated list of ignored modules. All modules in
+                                 this list may occur at any place in the modules section -->
+                                <moduleOrderIgnores>${config.enforcer.moduleOrderIgnores}</moduleOrderIgnores>
+
+                                <!-- DEPENDENCY_MANAGEMENT_ORDER Configuration Options -->
+                                <!-- Comma-separated list of dependency elements that defines the ordering -->
+                                <dependencyManagementOrderBy>${config.enforcer.dependencyManagementOrderBy}</dependencyManagementOrderBy>
+
+                                <!-- Comma-separated list of group IDs that should be listed first in the
+                                     dependencies declaration. All group IDs that start with any of the
+                                     prioritized group IDs in the given list, are required to be located
+                                     first in the dependencies section. -->
+
+                                <dependencyManagementGroupIdPriorities>${config.enforcer.dependencyManagementGroupIdPriorities}</dependencyManagementGroupIdPriorities>
+
+                                <!-- Comma-separated list of artifact IDs that should be listed first in
+                                     the dependencies declaration. All artifact IDs that start with any
+                                     of the prioritized IDs in the given list, are required to be located
+                                     first in the dependencies section. -->
+
+                                <dependencyManagementArtifactIdPriorities>${config.enforcer.dependencyManagementArtifactIdPriorities}</dependencyManagementArtifactIdPriorities>
+
+                                <!-- Comma-separated list of scopes that should be listed first in the
+                                     dependencies declaration. All scopes that equal any of the scopes
+                                     in the given list, are required to be located first in the
+                                     dependencies section. -->
+
+                                <dependencyManagementScopePriorities>${config.enforcer.dependencyManagementScopePriorities}</dependencyManagementScopePriorities>
+
+                                <!-- DEPENDENCY_MANAGEMENT_LOCATION Configuration Options -->
+                                <!-- Comma separated list of POMs that may declare <dependencyManagement>.
+
+                                     Each POM has to be defined in the format groupId:artifactId. -->
+
+                                <dependencyManagingPoms>${config.enforcer.dependencyManagingPoms}</dependencyManagingPoms>
+                                <!-- DEPENDENCY_ORDER Configuration Options -->
+                                <!-- Comma-separated list of dependency elements that defines the ordering -->
+
+                                <dependenciesOrderBy>${config.enforcer.dependenciesOrderBy}</dependenciesOrderBy>
+
+                                <!-- Comma-separated list of group IDs that should be listed first in the
+                                     dependencies declaration. All group IDs that start with any of the
+                                     prioritized group IDs in the given list, are required to be located
+                                     first in the dependencies section. -->
+
+                                <dependenciesGroupIdPriorities>${config.enforcer.dependenciesGroupIdPriorities}</dependenciesGroupIdPriorities>
+
+                                <!-- Comma-separated list of artifact IDs that should be listed first in
+                                     the dependencies declaration. All artifact IDs that start with any
+                                     of the prioritized IDs in the given list, are required to be located
+                                     first in the dependencies section. -->
+
+                                <dependenciesArtifactIdPriorities>${config.enforcer.dependenciesArtifactIdPriorities}</dependenciesArtifactIdPriorities>
+
+                                <!-- Comma-separated list of scopes that should be listed first in the
+                                     dependencies declaration. All scopes that equal any of the scopes
+                                     in the given list, are required to be located first in the
+                                     dependencies section. -->
+
+                                <dependenciesScopePriorities>${config.enforcer.dependenciesScopePriorities}</dependenciesScopePriorities>
+
+                                <!-- DEPENDENCY_CONFIGURATION Configuration Options -->
+                                <!-- If true, all dependency versions have to be defined
+                                     in the dependency management section -->
+
+                                <manageDependencyVersions>${config.enforcer.manageDependencyVersions}</manageDependencyVersions>
+
+                                <!-- If true, <version>${project.version}</version> may be used
+                                     within the dependencies section -->
+
+                                <allowUnmangedProjectVersions>${config.enforcer.allowUnmanagedProjectVersions}</allowUnmangedProjectVersions>
+
+                                <!-- If true, all dependency exclusions must be declared in
+                                     the dependency management -->
+
+                                <manageDependencyExclusions>${config.enforcer.manageDependencyExclusions}</manageDependencyExclusions>
+
+                                <!-- DEPENDENCY_SCOPE Configuration Options -->
+                                <!-- Comma-separated list of dependencies in the format groupId:artifactId -->
+
+                                <compileDependencies>${config.enforcer.compileDependencies}</compileDependencies>
+                                <providedDependencies>${config.enforcer.providedDependencies}</providedDependencies>
+                                <runtimeDependencies>${config.enforcer.runtimeDependencies}</runtimeDependencies>
+                                <systemDependencies>${config.enforcer.systemDependencies}</systemDependencies>
+                                <testDependencies>${config.enforcer.testDependencies}</testDependencies>
+                                <importDependencies>${config.enforcer.importDependencies}</importDependencies>
+
+                                <!-- PLUGIN_MANAGEMENT_ORDER Configuration Options -->
+                                <!-- Comma-separated list of plugin elements that defines the ordering -->
+
+                                <pluginManagementOrderBy>${config.enforcer.pluginManagementOrderBy}</pluginManagementOrderBy>
+
+                                <!-- Comma-separated list of group IDs that should be listed first in the
+                                     plugins declaration. All group IDs that start with any of the
+                                     prioritized group IDs in the given list, are required to be located
+                                     first in the dependencies section. -->
+
+                                <pluginManagementGroupIdPriorities>${config.enforcer.pluginManagementGroupIdPriorities}</pluginManagementGroupIdPriorities>
+
+                                <!-- Comma-separated list of artifact IDs that should be listed first in the
+                                     plugins declaration. All artifact IDs that start with any of the
+                                     prioritized artifact IDs in the given list, are required to be located
+                                     first in the dependencies section. -->
+
+                                <pluginManagementArtifactIdPriorities>${config.enforcer.pluginManagementArtifactIdPriorities}</pluginManagementArtifactIdPriorities>
+
+                                <!-- PLUGIN_CONFIGURATION Configuration Options -->
+                                <!-- Enforces plugin versions to be defined in <pluginManagement> -->
+
+                                <managePluginVersions>${config.enforcer.managePluginVersions}</managePluginVersions>
+
+                                <!-- Enforces plugin configuration to be defined in <pluginManagement> -->
+
+                                <managePluginConfigurations>${config.enforcer.managePluginConfigurations}</managePluginConfigurations>
+
+                                <!-- Enforces plugin dependencies to be defined in <pluginManagement> -->
+
+                                <managePluginDependencies>${config.enforcer.managePluginDependencies}</managePluginDependencies>
+
+                                <!-- PLUGIN_MANAGEMENT_LOCATION configuration -->
+                                <!-- Comma separated list of POMs that may declare <pluginManagement>.
+                                     Each POM has to be defined in the format groupId:artifactId. -->
+
+                                <pluginManagingPoms>${config.enforcer.pluginManagingPoms}</pluginManagingPoms>
+                            </compound>
+                        </rules>
+
+                    </configuration>
+
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.github.ferstl</groupId>
+                            <artifactId>pedantic-pom-enforcers</artifactId>
+                            <version>${plugin.dep.version.pedantic-pom-enforcers}</version>
+                        </dependency>
+                    </dependencies>
+
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${plugin.version.surefire-plugin}</version>
+                    <configuration>
+                        <skip>true</skip>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>surefire-it</id>
+                            <phase>integration-test</phase>
+                            <goals>
+                                <goal>test</goal>
+                            </goals>
+                            <configuration>
+                                <skip>false</skip>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${plugin.version.exec-maven-plugin}</version>
+                </plugin>
+                <plugin>
+
+                    <!-- Generate a findbugs report -->
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>findbugs-maven-plugin</artifactId>
+                    <version>${plugin.version.findbugs-plugin}</version>
+                    <configuration>
+                        <skip>false</skip>
+                        <failOnError>true</failOnError>
+                        <effort>Max</effort>
+                        <threshold>Default</threshold>
+                        <xmlOutput>true</xmlOutput>
+                        <excludeFilterFile>${config.findbugs.excludeFilterFile}</excludeFilterFile>
+                        <plugins>
+                            <dependency>
+                                <groupId>com.mebigfatguy.fb-contrib</groupId>
+                                <artifactId>fb-contrib</artifactId>
+                                <version>${plugin.dep.version.fb-contrib}</version>
+                            </dependency>
+                            <plugin>
+                                <groupId>com.h3xstream.findsecbugs</groupId>
+                                <artifactId>findsecbugs-plugin</artifactId>
+                                <version>${plugin.dep.version.findsecbugs}</version>
+                            </plugin>
+                        </plugins>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>default-findbugs-check</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>com.github.github</groupId>
+                <artifactId>site-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- runs a checkstyle report and fails the build if any violations -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>findbugs-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>docker-compose-up</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${project.build.testSourceDirectory}/docker/docker-up.sh</executable>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>docker-compose-down</id>
+                        <phase>post-integration-test</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>${project.build.testSourceDirectory}/docker/docker-down.sh</executable>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${checkstyleVersion}</version>
+            </plugin>
+        </plugins>
+    </reporting>
+
+    <profiles>
+        <profile>
+            <id>codecoverage-jacoco</id>
+            <activation>
+                <property>
+                    <name>codeCoverage</name>
+                    <value>jacoco</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <!-- prepare java agent for jacoco instrumentation -->
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacocoVersion}</version>
+                        <configuration>
+                            <destFile>${sonar.jacoco.reportPaths}</destFile>
+                            <append>true</append>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>pre-unit-test</id>
+                                <phase>initialize</phase>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>post-unit-test</id>
+                                <phase>test</phase>
+                                <goals>
+                                    <goal>report-aggregate</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>pre-integration-test</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>post-integration-test</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>report-aggregate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+
+            <reporting>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>${jacocoVersion}</version>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+    </profiles>
+
+</project>

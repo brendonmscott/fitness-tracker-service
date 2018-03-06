@@ -1,0 +1,22 @@
+version: '2'
+services:
+  wildfly:
+    build:
+      context: ./jboss
+    image: "fitness.tracker.service-tracker:wildfly"
+    ports:
+      - "8080:8080"
+      - "8787:8787"
+      - "9990:9990"
+  mongo:
+    image: "mongo:3.2.12"
+    ports:
+      - "27017:27017"
+    volumes:
+      - /Users/brendonscott/Documents/mongo:/data/db
+
+  sonar:
+    image: "sonarqube:latest"
+    ports:
+      - "9000:9000"
+      - "9092:9092"
