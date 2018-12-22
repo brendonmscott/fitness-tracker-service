@@ -1,7 +1,7 @@
 [
   {
     "id": "59f5344e8d6aa4686a59e128",
-    "email" : "bartsimpson@springfield.gov",
+    "userName" : "bartsimpson@springfield.gov",
     "owner" : {
       "id": "59e2cff8e4b06b700839b5fa",
       "firstName": "Bart",

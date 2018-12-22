@@ -20,17 +20,17 @@ public class FavoriteFoodsService {
     private Gson gson = new Gson();
 
     @Autowired
-    public FavoriteFoodsService(FoodService foodService, UserService userService){
+    public FavoriteFoodsService(FoodService foodService, UserService userService) {
         this.foodService = foodService;
         this.userService = userService;
     }
 
-    public User addFavoriteFoodItem(String foodItemId, String userId){
+    public User addFavoriteFoodItem(String foodItemId, String userId) {
 
         logger.info("Adding favorite food item {} to user {}", foodItemId, userId);
         User user = userService.findUserById(userId);
 
-        if(!user.getFavoriteFoodItems().contains(new ObjectId(foodItemId))){
+        if (!user.getFavoriteFoodItems().contains(new ObjectId(foodItemId))) {
             user.getFavoriteFoodItems().add(new ObjectId(foodItemId));
             user = userService.updateUser(user);
         }
@@ -46,7 +46,7 @@ public class FavoriteFoodsService {
         return userService.updateUser(user);
     }
 
-    public User addCustomizedFoodItem(FoodItem foodItem, String userId) throws BusinessLogicException{
+    public User addCustomizedFoodItem(FoodItem foodItem, String userId) throws BusinessLogicException {
 
         String foodItemJson = gson.toJson(foodItem);
 

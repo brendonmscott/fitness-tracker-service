@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class FoodItemTranslator extends ConfigurableMapper{
+public class FoodItemTranslator extends ConfigurableMapper {
 
     private MapperFacade mapper;
 
@@ -24,12 +24,12 @@ public class FoodItemTranslator extends ConfigurableMapper{
         mapper = factory.getMapperFacade();
     }
 
-    public List<FoodItemDto> toDtos(List<FoodItem> foodItems){
+    public List<FoodItemDto> toDtos(List<FoodItem> foodItems) {
 
         List<FoodItemDto> foodItemDtos = new ArrayList<>();
 
-        if(foodItems != null){
-            for(FoodItem foodItem : foodItems){
+        if (foodItems != null) {
+            for (FoodItem foodItem : foodItems) {
                 foodItemDtos.add(toDto(foodItem));
             }
         }
@@ -37,11 +37,11 @@ public class FoodItemTranslator extends ConfigurableMapper{
         return foodItemDtos;
     }
 
-    public FoodItemDto toDto(FoodItem foodItem){
+    public FoodItemDto toDto(FoodItem foodItem) {
         return mapper.map(foodItem, FoodItemDto.class);
     }
 
-    public FoodItem toEntity(FoodItemDto foodItemDto){
+    public FoodItem toEntity(FoodItemDto foodItemDto) {
         return mapper.map(foodItemDto, FoodItem.class);
     }
 }

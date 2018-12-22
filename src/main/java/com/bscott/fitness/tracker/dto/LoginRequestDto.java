@@ -4,11 +4,10 @@ import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
 
 @Data
-public class UserLoginDto {
+public class LoginRequestDto {
 
     @NotBlank
-    private String email;
-
+    private String usernameOrEmail;
     @NotBlank
     private String password;
 }

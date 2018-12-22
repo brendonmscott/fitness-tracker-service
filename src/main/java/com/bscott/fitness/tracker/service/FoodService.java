@@ -17,15 +17,15 @@ public class FoodService {
     private FoodsRepository foodsRepository;
 
     @Autowired
-    public FoodService(FoodsRepository foodsRepository){
+    public FoodService(FoodsRepository foodsRepository) {
         this.foodsRepository = foodsRepository;
     }
 
-    public FoodItem findFoodItemById(@NotEmpty String id){
+    public FoodItem findFoodItemById(@NotEmpty String id) {
         return foodsRepository.findOne(id);
     }
 
-    public List<FoodItem> findFoodItemsBySearchCriteria(String name){
+    public List<FoodItem> findFoodItemsBySearchCriteria(String name) {
         return foodsRepository.findFoodItemsByNameLike(name);
     }
 
@@ -34,20 +34,20 @@ public class FoodService {
         // Verify a food item with the same name does not exist
         FoodItem existingFoodItem = foodsRepository.findFoodItemsByName(foodItem.getName());
 
-        if(existingFoodItem != null){
+        if (existingFoodItem != null) {
             throw new BusinessLogicException("Food Item " + foodItem.getName() + " already exists");
         }
 
         return foodsRepository.save(foodItem);
     }
 
-    public FoodItem updateFoodItem(@Valid @NotNull FoodItem foodItem){
+    public FoodItem updateFoodItem(@Valid @NotNull FoodItem foodItem) {
 
         foodsRepository.save(foodItem);
         return foodItem;
     }
 
-    public void deleteFoodItem(@NotEmpty String id){
+    public void deleteFoodItem(@NotEmpty String id) {
         foodsRepository.delete(id);
     }
 }

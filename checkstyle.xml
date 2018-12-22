@@ -137,29 +137,25 @@
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
 
-        <!--
         <module name="LineLength">
-        	<property name="max" value="500"/>
-		</module>
-           -->
+        	   <property name="max" value="200"/>
+		  </module>
 
         <module name="MethodLength">
-            <property name="max" value="3000"/>
+            <property name="max" value="2000"/>
             <property name="countEmpty" value="false"/>
         </module>
-        <!--
-                <module name="ParameterNumber">
-                    <property name="max" value="6" />
-                    <property name="tokens" value="METHOD_DEF" />
-                </module>
-        -->
+        <module name="ParameterNumber">
+            <property name="max" value="6" />
+            <property name="tokens" value="METHOD_DEF" />
+        </module>
 
         <!-- Checks for whitespace                               -->
         <!-- See http://checkstyle.sf.net/config_whitespace.html -->
         <module name="EmptyForIteratorPad"/>
         <module name="MethodParamPad"/>
-        <!--         <module name="NoWhitespaceAfter"/> -->
-        <!--         <module name="NoWhitespaceBefore"/> -->
+        <module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceBefore"/>
         <module name="OperatorWrap">
             <property name="tokens"
                       value="ASSIGN,DIV_ASSIGN,PLUS_ASSIGN,MINUS_ASSIGN,STAR_ASSIGN,MOD_ASSIGN,SR_ASSIGN,BSR_ASSIGN,SL_ASSIGN,BXOR_ASSIGN,BOR_ASSIGN,BAND_ASSIGN"/>
@@ -169,10 +165,9 @@
         <!--
         <module name="ParenPad"/>
 
-        <module name="TypecastParenPad"/>
+        <module name="TypecastParenPad"/> -->
         <module name="WhitespaceAfter"/>
-        <module name="WhitespaceAround"/> -->
-
+        <module name="WhitespaceAround"/>
 
         <!-- Modifier Checks                                    -->
         <!-- See http://checkstyle.sf.net/config_modifiers.html -->
@@ -202,7 +197,11 @@
         <!-- module name="HiddenField"/-->
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
-        <!-- module name="MagicNumber"/-->
+        <module name="MagicNumber">
+            <property name="ignoreHashCodeMethod" value="true"/>
+            <property name="ignoreAnnotation" value="true"/>
+            <property name="ignoreFieldDeclaration" value="true"/>
+        </module>
         <module name="MissingSwitchDefault"/>
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
@@ -214,7 +213,6 @@
         <module name="HideUtilityClassConstructor"/>
         <module name="InterfaceIsType"/>
         <module name="VisibilityModifier"/>
-
 
         <!-- Miscellaneous other checks.                   -->
         <!-- See http://checkstyle.sf.net/config_misc.html -->

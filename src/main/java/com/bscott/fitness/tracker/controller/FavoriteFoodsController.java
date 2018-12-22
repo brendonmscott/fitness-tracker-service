@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.bscott.fitness.tracker.exception.BusinessLogicException;
@@ -38,7 +39,7 @@ public class FavoriteFoodsController {
             @ApiResponse(code = 200, message = "Favorite Food Item was added successfully")
     })
     @PutMapping("/favorites")
-    public ResponseEntity addFavoriteFood(@ApiParam(value = "The food item to add", required = true) FavoriteFoodItemDto favoriteFoodItemDto){
+    public ResponseEntity addFavoriteFood(@ApiParam(value = "The food item to add", required = true) @RequestBody FavoriteFoodItemDto favoriteFoodItemDto) {
 
         User user = favoriteFoodsService.addFavoriteFoodItem(
                 favoriteFoodItemDto.getFoodItemId(), favoriteFoodItemDto.getUserId());
@@ -52,7 +53,7 @@ public class FavoriteFoodsController {
     })
     @DeleteMapping("/favorites/{foodItemId}/user/{userId}")
     public ResponseEntity deleteFavoriteFood(@ApiParam(value = "The food item to delete", required = true) @PathVariable("foodItemId") String foodItemId,
-                                @ApiParam(value = "The user to delete the item for", required = true) @PathVariable("userId") String userId){
+                                @ApiParam(value = "The user to delete the item for", required = true) @PathVariable("userId") String userId) {
 
         User user = favoriteFoodsService.deleteFavoriteFoodItem(foodItemId, userId);
 
@@ -64,8 +65,8 @@ public class FavoriteFoodsController {
             @ApiResponse(code = 200, message = "Customized Food Item was added successfully")
     })
     @PostMapping("/customized")
-    public ResponseEntity addCustomizedFood(@ApiParam(value = "The food item to add", required = true) CustomizedFoodItemDto customizedFoodItemDto)
-            throws BusinessLogicException{
+    public ResponseEntity addCustomizedFood(@ApiParam(value = "The food item to add", required = true) @RequestBody CustomizedFoodItemDto customizedFoodItemDto)
+            throws BusinessLogicException {
 
         User user = favoriteFoodsService.addCustomizedFoodItem(
                 foodItemTranslator.toEntity(customizedFoodItemDto.getFoodItem()), customizedFoodItemDto.getUserId());
@@ -79,7 +80,7 @@ public class FavoriteFoodsController {
     })
     @DeleteMapping("/customized/{foodItemId}/user/{userId}")
     public ResponseEntity deleteCustomizedFood(@ApiParam(value = "The food item to delete", required = true) @PathVariable("foodItemId") String foodItemId,
-                                  @ApiParam(value = "The user to delete the item for", required = true) @PathVariable("userId") String userId){
+                                  @ApiParam(value = "The user to delete the item for", required = true) @PathVariable("userId") String userId) {
 
         User user = favoriteFoodsService.deleteCustomizedFoodItem(foodItemId, userId);
 

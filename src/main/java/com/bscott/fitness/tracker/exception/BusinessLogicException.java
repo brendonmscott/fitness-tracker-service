@@ -1,8 +1,8 @@
 package com.bscott.fitness.tracker.exception;
 
-public class BusinessLogicException extends Exception{
+public class BusinessLogicException extends Exception {
 
-    public BusinessLogicException(String message){
+    public BusinessLogicException(String message) {
         super(message);
     }
 }

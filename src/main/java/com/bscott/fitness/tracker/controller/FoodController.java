@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -42,11 +43,11 @@ public class FoodController {
             @ApiResponse(code = 404, message = "Food was not found")
     })
     @GetMapping("/{id}")
-    public ResponseEntity findFoodById(@ApiParam(value = "The id of the food to find", required = true) @PathVariable("id") String id){
+    public ResponseEntity findFoodById(@ApiParam(value = "The id of the food to find", required = true) @PathVariable("id") String id) {
 
         FoodItemDto foodItem = foodItemTranslator.toDto(foodService.findFoodItemById(id));
 
-        if(foodItem == null){
+        if (foodItem == null) {
             return ResponseEntity.notFound().build();
         }
 
@@ -57,9 +58,9 @@ public class FoodController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Foods were retrieved successfully")
     })
-    @PreAuthorize("hasAuthority('ADMIN_USER') or hasAuthority('STANDARD_USER')")
-    @GetMapping("/")
-    public ResponseEntity findFoods(@RequestParam(value = "name") String name){
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping
+    public ResponseEntity findFoods(@RequestParam(value = "name") String name) {
 
         List<FoodItemDto> foodItems = foodItemTranslator.toDtos(foodService.findFoodItemsBySearchCriteria(name));
 
@@ -70,8 +71,8 @@ public class FoodController {
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Food Item was added successfully")
     })
-    @PostMapping("/")
-    public ResponseEntity addFoodItem(@ApiParam(value = "The food item to add", required = true) FoodItemDto foodItemDto) throws BusinessLogicException{
+    @PostMapping
+    public ResponseEntity addFoodItem(@ApiParam(value = "The food item to add", required = true) @RequestBody FoodItemDto foodItemDto) throws BusinessLogicException {
 
         FoodItem newFoodItem = foodService.addFoodItem(foodItemTranslator.toEntity(foodItemDto));
 
@@ -80,15 +81,14 @@ public class FoodController {
                 .buildAndExpand(newFoodItem.getId()).toUri();
 
         return ResponseEntity.created(location).body(foodItemTranslator.toDto(newFoodItem));
-
     }
 
     @ApiOperation(value = "Update food item")
     @ApiResponses(value = {
             @ApiResponse(code = 201, message = "Food Item was updated successfully")
     })
-    @PutMapping("/")
-    public ResponseEntity updateFoodItem(@ApiParam(value = "The food item to update", required = true) FoodItemDto foodItemDto){
+    @PutMapping
+    public ResponseEntity updateFoodItem(@ApiParam(value = "The food item to update", required = true) @RequestBody FoodItemDto foodItemDto) {
 
         FoodItem updatedFoodItem = foodService.updateFoodItem(foodItemTranslator.toEntity(foodItemDto));
 
@@ -100,7 +100,7 @@ public class FoodController {
             @ApiResponse(code = 204, message = "Food Item was deleted successfully")
     })
     @DeleteMapping("/{id}")
-    public ResponseEntity deleteFoodItem(@ApiParam(value = "The id of the food item to delete", required = true) @PathVariable("id") String id){
+    public ResponseEntity deleteFoodItem(@ApiParam(value = "The id of the food item to delete", required = true) @PathVariable("id") String id) {
 
         foodService.deleteFoodItem(id);
         return ResponseEntity.noContent().build();

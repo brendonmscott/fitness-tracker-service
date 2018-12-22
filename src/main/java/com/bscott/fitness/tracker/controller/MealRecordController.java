@@ -1,10 +1,15 @@
 package com.bscott.fitness.tracker.controller;
 
+import com.bscott.fitness.tracker.dto.DailyMealRecordDto;
+import com.bscott.fitness.tracker.model.DailyMealRecord;
 import com.bscott.fitness.tracker.service.MealRecordService;
+import com.bscott.fitness.tracker.translator.MealRecordTranslator;
 import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,14 +18,23 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.net.URI;
 
 @Api(value = "Meal Record Services")
 @RestController
 @RequestMapping("/meals")
 public class MealRecordController {
 
-    @Autowired
     private MealRecordService mealRecordService;
+    private MealRecordTranslator mealRecordTranslator;
+
+    @Autowired
+    public MealRecordController(MealRecordService mealRecordService, MealRecordTranslator mealRecordTranslator) {
+        this.mealRecordService = mealRecordService;
+        this.mealRecordTranslator = mealRecordTranslator;
+    }
 
     @ApiOperation(value = "Get Daily Meal Record")
     @ApiResponses(value = {
@@ -29,7 +43,7 @@ public class MealRecordController {
     })
     @GetMapping("/daily")
     public ResponseEntity findMealRecord(@ApiParam(value = "The userId of the meal record to find", required = true) @RequestParam("userId") String userId,
-                                  @ApiParam(value = "The date of the meal record to find") @RequestParam("date") String date){
+                                  @ApiParam(value = "The date of the meal record to find") @RequestParam("date") String date) {
 
         LocalDate searchDate = new LocalDate(date);
 
@@ -47,16 +61,23 @@ public class MealRecordController {
 //    @Path("/")
 //    Response findFoods(@QueryParam(value = "name") String name);
 //
-//    @ApiOperation(value = "Add new food item")
-//    @ApiResponses(value = {
-//            @ApiResponse(code = 200, message = "Food Item was added successfully")
-//    })
-//    @Secured
-//    @POST
-//    @Path("/")
-//    Response addFoodItem(@ApiParam(value = "The food item to add", required = true) FoodItemDto foodItemDto,
-//                         @Context UriInfo uriInfo) throws BusinessLogicException;
-//
+    @ApiOperation(value = "Add new meal record")
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Meal Record was added successfully")
+    })
+    @PostMapping
+    ResponseEntity addMealRecord(@ApiParam(value = "The meal record to add", required = true)
+                                 @RequestBody DailyMealRecordDto dailyMealRecordDto) {
+
+        DailyMealRecord newDailyMealRecord = mealRecordService.addDailyMealRecord(mealRecordTranslator.toEntity(dailyMealRecordDto));
+
+        URI location = ServletUriComponentsBuilder
+                .fromCurrentRequest().path("/{id}")
+                .buildAndExpand(newDailyMealRecord.getId()).toUri();
+
+        return ResponseEntity.created(location).body(mealRecordTranslator.toDto(newDailyMealRecord));
+    }
+
 //    @ApiOperation(value = "Update food item")
 //    @ApiResponses(value = {
 //            @ApiResponse(code = 201, message = "Food Item was updated successfully")

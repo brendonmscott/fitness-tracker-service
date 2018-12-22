@@ -1,4 +1,4 @@
-package com.bscott.fitness.tracker;
+package com.bscott.fitness.tracker.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

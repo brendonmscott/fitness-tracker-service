@@ -12,18 +12,23 @@ public class MealRecordService {
 
     private MealRecordRepository mealRecordRepository;
 
-    public MealRecordService(MealRecordRepository mealRecordRepository){
+    public MealRecordService(MealRecordRepository mealRecordRepository) {
         this.mealRecordRepository = mealRecordRepository;
     }
 
-    public List<DailyMealRecord> findMealRecordBySearchCriteria(String userId, LocalDate date){
+    public List<DailyMealRecord> findMealRecordBySearchCriteria(String userId, LocalDate date) {
 
         LocalDate searchDate = date;
 
-        if(searchDate == null){
+        if (searchDate == null) {
             searchDate = new LocalDate("2018-01-01");
         }
 
         return mealRecordRepository.findDailyMealRecordsByUserIdAndDate(userId, searchDate);
+    }
+
+    public DailyMealRecord addDailyMealRecord(DailyMealRecord dailyMealRecord) {
+
+        return mealRecordRepository.save(dailyMealRecord);
     }
 }

@@ -26,7 +26,7 @@ class ApiError {
     private String debugMessage;
     private List<ApiSubError> subErrors;
 
-    private ApiError() {}
+    private ApiError() { }
 
     ApiError(HttpStatus status) {
         this();
@@ -100,7 +100,7 @@ class ApiError {
         constraintViolations.forEach(this::addValidationError);
     }
 
-    abstract class ApiSubError {}
+    abstract class ApiSubError { }
 
     @Data
     @EqualsAndHashCode(callSuper = false)

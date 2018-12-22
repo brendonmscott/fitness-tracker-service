@@ -20,13 +20,17 @@ import java.util.List;
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
    @Override
-   protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+   protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+                                                                 HttpHeaders headers, HttpStatus status,
+                                                                 WebRequest request) {
        String error = "Malformed JSON request";
        return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, error, ex));
    }
 
    @Override
-   protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request){
+   protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+                                                                 HttpHeaders headers, HttpStatus status,
+                                                                 WebRequest request) {
 
        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, "Validation Exception", ex);
 

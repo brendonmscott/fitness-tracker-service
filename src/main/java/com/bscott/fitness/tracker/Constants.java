@@ -11,9 +11,11 @@ public final class Constants {
     public static final String FOODS_COLLECTION = "foods";
     public static final String LOGIN_COLLECTION = "login";
     public static final String MEAL_RECORD_COLLECTION = "meal_record";
+    public static final String ROLE_COLLECTION = "roles";
     public static final String USER_COLLECTION = "users";
 
-    public static final String ADMIN_ROLE = "admin";
+    public static final String ADMIN_USER = "ADMIN_USER";
+    public static final String STANDARD_USER = "STANDARD_USER";
 
-    private Constants(){}
+    private Constants() { }
 }

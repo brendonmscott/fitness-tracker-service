@@ -10,7 +10,7 @@ import javax.validation.constraints.NotNull;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class RegisterUserDto {
+public class SignUpRequestDto {
 
     @NotBlank
     private String firstName;
@@ -19,8 +19,14 @@ public class RegisterUserDto {
     @NotNull
     private String birthDate;
     @NotEmpty
+    private String username;
+    @NotEmpty
     @Email
     private String email;
     @NotBlank
     private String password;
+
+    public String getName() {
+        return firstName + " " + lastName;
+    }
 }

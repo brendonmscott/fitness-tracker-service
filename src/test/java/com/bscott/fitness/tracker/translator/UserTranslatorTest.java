@@ -1,7 +1,7 @@
 package com.bscott.fitness.tracker.translator;
 
 import com.bscott.fitness.tracker.Constants;
-import com.bscott.fitness.tracker.dto.RegisterUserDto;
+import com.bscott.fitness.tracker.dto.SignUpRequestDto;
 import com.bscott.fitness.tracker.dto.UserDto;
 import com.bscott.fitness.tracker.model.LoginCredentials;
 import com.bscott.fitness.tracker.model.User;
@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 public class UserTranslatorTest {
 
     private UserTranslator userTranslator = new UserTranslator();
-    private RegisterUserDto registerUserDto;
+    private SignUpRequestDto signUpRequestDto;
     private User user1, user2;
     private UserDto userDto;
     private List<User> userList;
@@ -32,24 +32,20 @@ public class UserTranslatorTest {
     @Before
     public void setup(){
 
-        registerUserDto = new RegisterUserDto();
-        registerUserDto.setFirstName("Homer");
-        registerUserDto.setLastName("Simpson");
-        registerUserDto.setBirthDate("12/19/1975");
-        registerUserDto.setEmail("homer.simpson@gmail.com");
-        registerUserDto.setPassword("mmmDonuts");
+        signUpRequestDto = new SignUpRequestDto();
+        signUpRequestDto.setFirstName("Homer");
+        signUpRequestDto.setLastName("Simpson");
+        signUpRequestDto.setBirthDate("12/19/1975");
+        signUpRequestDto.setUsername("homer.simpson@gmail.com");
+        signUpRequestDto.setPassword("mmmDonuts");
 
-        user1 = new User();
-        user1.setFirstName("Homer");
-        user1.setLastName("Simpson");
-        user1.setBirthDate(new LocalDate("1975-12-19"));
-        user1.getRoles().add(Constants.ADMIN_ROLE);
+        user1 = new User("Homer", "Simpson", new LocalDate("1975-12-19"),
+                "MaxPower", "feelthegees@maxpower.com", "donut");
+        user1.getRoles().add(Constants.ADMIN_USER);
 
-        user2 = new User();
-        user2.setFirstName("Marge");
-        user2.setLastName("Simpson");
-        user2.setBirthDate(new LocalDate("1976-08-20"));
-        user2.getRoles().add(Constants.ADMIN_ROLE);
+        user2 = new User("Marge", "Simpson", new LocalDate("1976-08-20"),
+                "marge", "marge@simpsons.com", "homey");
+        user2.getRoles().add(Constants.ADMIN_USER);
 
         userList = new ArrayList<>();
         userList.add(user1);
@@ -59,7 +55,7 @@ public class UserTranslatorTest {
         userDto.setFirstName("Homer");
         userDto.setLastName("Simpson");
         userDto.setBirthDate("12/19/1975");
-        userDto.getRoles().add(Constants.ADMIN_ROLE);
+        userDto.getRoles().add(Constants.ADMIN_USER);
     }
 
     @Test
@@ -76,7 +72,7 @@ public class UserTranslatorTest {
         assertEquals(user1.getFirstName(), userDto.getFirstName());
         assertEquals(user1.getLastName(), userDto.getLastName());
         assertEquals(user1.getBirthDate().toString("MM/dd/YYYY"), userDto.getBirthDate());
-        assertThat(user1.getRoles(), CoreMatchers.hasItem(Constants.ADMIN_ROLE));
+        assertThat(user1.getRoles(), CoreMatchers.hasItem(Constants.ADMIN_USER));
     }
 
     @Test
@@ -112,25 +108,14 @@ public class UserTranslatorTest {
         assertEquals(userDto.getFirstName(), user.getFirstName());
         assertEquals(userDto.getLastName(), user.getLastName());
         assertEquals(userDto.getBirthDate(), user.getBirthDate().toString("MM/dd/YYYY"));
-        assertThat(userDto.getRoles(), CoreMatchers.hasItem(Constants.ADMIN_ROLE));
+        assertThat(userDto.getRoles(), CoreMatchers.hasItem(Constants.ADMIN_USER));
     }
 
     @Test
     public void testCreateNewUser_NullDto(){
 
-        User user = userTranslator.createNewUser(null);
+        User user = userTranslator.toEntity(null);
         assertNull(user);
-    }
-
-    @Test
-    public void testCreateNewUser(){
-
-        User user = userTranslator.createNewUser(registerUserDto);
-        assertNotNull(user);
-        assertEquals(registerUserDto.getFirstName(), user.getFirstName());
-        assertEquals(registerUserDto.getLastName(), user.getLastName());
-        assertEquals("1975-12-19", user.getBirthDate().toString());
-        assertThat(user.getRoles(), CoreMatchers.hasItem(Constants.ADMIN_ROLE));
     }
 
     @Test
@@ -143,9 +128,9 @@ public class UserTranslatorTest {
     @Test
     public void testGetLoginCredentials(){
 
-        LoginCredentials loginCredentials = userTranslator.getLoginCredentials(registerUserDto);
+        LoginCredentials loginCredentials = userTranslator.getLoginCredentials(signUpRequestDto);
         assertNotNull(loginCredentials);
-        assertEquals(registerUserDto.getEmail(), loginCredentials.getUserName());
-        assertEquals(registerUserDto.getPassword(), loginCredentials.getPassword());
+        assertEquals(signUpRequestDto.getUsername(), loginCredentials.getUserName());
+        assertEquals(signUpRequestDto.getPassword(), loginCredentials.getPassword());
     }
 }

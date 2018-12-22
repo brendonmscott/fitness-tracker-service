@@ -1,13 +1,5 @@
 version: '2'
 services:
-  wildfly:
-    build:
-      context: ./jboss
-    image: "fitness.tracker.service-tracker:wildfly"
-    ports:
-      - "8080:8080"
-      - "8787:8787"
-      - "9990:9990"
   mongo:
     image: "mongo:3.2.12"
     ports:

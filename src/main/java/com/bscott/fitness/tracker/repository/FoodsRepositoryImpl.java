@@ -10,13 +10,15 @@ import java.util.List;
 
 public class FoodsRepositoryImpl implements FoodsRepositoryCustom {
 
+    private static final int PAGE_SIZE = 10;
+
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    public List<FoodItem> findFoods(String name){
+    public List<FoodItem> findFoods(String name) {
 
         Query query = new Query();
-        query.limit(10);
+        query.limit(PAGE_SIZE);
         query.addCriteria(Criteria.where("name").regex(name));
 
         return mongoTemplate.find(query, FoodItem.class);

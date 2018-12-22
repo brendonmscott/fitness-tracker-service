@@ -14,7 +14,7 @@ public class ObjectIdListConverter extends BidirectionalConverter<List<String>, 
    public List<ObjectId> convertTo(List<String> source, Type<List<ObjectId>> destinationType) {
 
       List<ObjectId> objectIds = new ArrayList<>();
-      for(String objectId : source){
+      for (String objectId : source) {
          objectIds.add(new ObjectId(objectId));
       }
 
@@ -24,7 +24,7 @@ public class ObjectIdListConverter extends BidirectionalConverter<List<String>, 
    public List<String> convertFrom(List<ObjectId> source, Type<List<String>> destinationType) {
 
       List<String> objectIds = new ArrayList<>();
-      for(ObjectId objectId : source){
+      for (ObjectId objectId : source) {
          objectIds.add(objectId.toString());
       }
 
